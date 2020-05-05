@@ -30,7 +30,6 @@ class CreateDoctorService {
       crm,
       expertise: checkExpertiseExists,
     });
-
     await doctorRepository.save(doctor);
 
     return doctor;
