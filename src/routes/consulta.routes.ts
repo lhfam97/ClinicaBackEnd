@@ -4,6 +4,9 @@ import Consulta from '../models/Consulta';
 import AppError from '../errors/AppError';
 import DoctorTime from '../models/DoctorTime';
 import Cobertura from '../models/Cobertura';
+import Doctor from '../models/Doctor'
+import Patient from '../models/Patient';
+import Expertise from '../models/Expertise'
 import CreateConsultaService from '../services/CreateConsultaService';
 
 const consultaRouter = Router();
@@ -12,18 +15,62 @@ consultaRouter.get('/', async (request, response) => {
   // const consultaRepository = getRepository(Consulta);
   // const consulta = await consultaRepository.find();
   try {
-    const consulta = await createQueryBuilder(Consulta)
+    const consultas = await createQueryBuilder(Consulta)
       .leftJoinAndSelect(
         Cobertura,
         'cobertura',
         'Consulta.cobertura_id = cobertura.id',
       )
+      .leftJoinAndSelect(
+        Patient,
+        'patient',
+        'Consulta.patient_id = patient.id',
+      ).leftJoinAndSelect(
+        DoctorTime,
+        'doctor_time',
+        'Consulta.doctor_time_id = doctor_time.id'
+      ).leftJoinAndSelect(
+        Doctor,
+        'doctor',
+        'doctor_time.doctor_id = doctor.id'
+      ).leftJoinAndSelect(
+        Expertise,
+        'expertise',
+        'doctor.expertise_id = expertise.id'
+      )
       .getRawMany();
-    console.log(consulta);
+    consultas.map((consulta) => {
+      delete consulta.Consulta_doctor_time_id;
+      delete consulta.Consulta_patient_id;
+      delete consulta.Consulta_cobertura_id;
+      delete consulta.cobertura_id;
+      delete consulta.cobertura_created_at;
+      delete consulta.cobertura_updated_at;
+      delete consulta.patient_id;
+      delete consulta.patient_address_id;
+      delete consulta.patient_created_at;
+      delete consulta.patient_updated_at;
+      delete consulta.doctor_time_id;
+      delete consulta.doctor_time_doctor_id;
+      delete consulta.doctor_time_time_id;
+      delete consulta.doctor_time_available;
+      delete consulta.doctor_time_created_at;
+      delete consulta.doctor_time_updated_at;
+      delete consulta.doctor_id;
+      delete consulta.doctor_expertise_id;
+      delete consulta.doctor_created_at;
+      delete consulta.doctor_updated_at;
+      delete consulta.expertise_id;
+      delete consulta.expertise_created_at;
+      delete consulta.expertise_updated_at;
+
+    })
+    console.log(consultas);
+    response.json(consultas);
   } catch (error) {
     console.log(error);
   }
-  response.json(consulta);
+
 });
 
 consultaRouter.post('/', async (request, response) => {
