@@ -5,11 +5,12 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export default class CreatePatient1588642189669 implements MigrationInterface {
+// eslint-disable-next-line import/prefer-default-export
+export class CreateDoctorTime1588815618147 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'patients',
+        name: 'doctor_times',
         columns: [
           {
             name: 'id',
@@ -19,32 +20,16 @@ export default class CreatePatient1588642189669 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'name',
-            type: 'varchar',
-          },
-          {
-            name: 'address_id',
+            name: 'doctor_id',
             type: 'uuid',
-            isNullable: false,
           },
           {
-            name: 'birth_date',
-            type: 'date',
+            name: 'time_id',
+            type: 'uuid',
           },
           {
-            name: 'phone',
-            type: 'varchar',
-            length: '11',
-          },
-          {
-            name: 'rg',
-            type: 'varchar',
-            length: '15',
-          },
-          {
-            name: 'cpf',
-            type: 'varchar',
-            length: '11',
+            name: 'available',
+            type: 'boolean',
           },
           {
             name: 'created_at',
@@ -59,20 +44,32 @@ export default class CreatePatient1588642189669 implements MigrationInterface {
         ],
       }),
     );
+
     await queryRunner.createForeignKey(
-      'patients',
+      'doctor_times',
       new TableForeignKey({
-        name: 'PatientAddress',
-        columnNames: ['address_id'],
+        name: 'ScheduleDoctor',
+        columnNames: ['doctor_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'addresses',
-        onDelete: 'SET NULL',
+        referencedTableName: 'doctors',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      }),
+    );
+    await queryRunner.createForeignKey(
+      'doctor_times',
+      new TableForeignKey({
+        name: 'ScheduleTime',
+        columnNames: ['time_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'times',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('patients');
+    await queryRunner.dropTable('doctor_times');
   }
 }
