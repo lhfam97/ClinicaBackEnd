@@ -48,6 +48,7 @@ consultaRouter.get('/', async (request, response) => {
       delete consulta.cobertura_updated_at;
       delete consulta.patient_id;
       delete consulta.patient_address_id;
+      delete consulta.patient_password;
       delete consulta.patient_created_at;
       delete consulta.patient_updated_at;
       delete consulta.doctor_time_id;
@@ -60,6 +61,7 @@ consultaRouter.get('/', async (request, response) => {
       delete consulta.doctor_expertise_id;
       delete consulta.doctor_created_at;
       delete consulta.doctor_updated_at;
+      delete consulta.doctor_password;
       delete consulta.expertise_id;
       delete consulta.expertise_created_at;
       delete consulta.expertise_updated_at;

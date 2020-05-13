@@ -1,9 +1,9 @@
 import { getRepository } from 'typeorm';
-
+import { hash } from 'bcryptjs';
 import moment from 'moment';
 import Address from '../models/Address';
 import Patient from '../models/Patient';
-
+import AppError from '../errors/AppError';
 interface Request {
   name: string;
 
@@ -20,6 +20,8 @@ interface Request {
   neighborhood: string;
 
   number: number;
+
+  password: string;
 }
 
 class CreatePatientService {
@@ -32,6 +34,7 @@ class CreatePatientService {
     street,
     neighborhood,
     number,
+    password
   }: Request): Promise<Patient> {
     const patientRepository = getRepository(Patient);
     const addressRepository = getRepository(Address);
@@ -50,17 +53,27 @@ class CreatePatientService {
       await addressRepository.save(new_Address);
       checkAddressExists = new_Address;
     }
-    const patient = patientRepository.create({
-      name,
-      phone,
-      birth_date: date,
-      address: checkAddressExists,
-      cpf,
-      rg,
+    const checkPatientExists = await patientRepository.findOne({
+      where: { cpf },
     });
-    await patientRepository.save(patient);
+    if (checkPatientExists) {
+      throw new AppError('Crm already used');
+    } else {
+      const hashedPassword = await hash(password, 8);
+      const patient = patientRepository.create({
+        name,
+        phone,
+        birth_date: date,
+        address: checkAddressExists,
+        cpf,
+        rg,
+        password: hashedPassword
+      });
+      await patientRepository.save(patient);
+      delete patient.password;
 
-    return patient;
+      return patient;
+    }
   }
 }
 

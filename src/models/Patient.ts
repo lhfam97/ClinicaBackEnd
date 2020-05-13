@@ -19,6 +19,9 @@ class Patient {
   name: string;
 
   @Column()
+  password: string;
+
+  @Column()
   birth_date: Date;
 
   @Column()

@@ -13,9 +13,9 @@ doctorRouter.get('/', async (request, response) => {
 });
 
 doctorRouter.post('/', async (request, response) => {
-  const { name, crm, expertise } = request.body;
+  const { name, crm, expertise, password } = request.body;
   const createDoctorService = new CreateDoctorService();
-  const doctor = createDoctorService.Execute({ name, crm, expertise });
+  const doctor = await createDoctorService.Execute({ name, crm, expertise, password });
   return response.json(doctor);
 });
 

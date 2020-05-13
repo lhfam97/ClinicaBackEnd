@@ -22,6 +22,9 @@ class Doctor {
   crm: string;
 
   @Column()
+  password: string;
+
+  @Column()
   expertise_id: string;
 
   @ManyToOne(() => Expertise)
