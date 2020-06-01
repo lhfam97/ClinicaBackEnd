@@ -4,9 +4,9 @@ import Consulta from '../models/Consulta';
 import AppError from '../errors/AppError';
 import DoctorTime from '../models/DoctorTime';
 import Cobertura from '../models/Cobertura';
-import Doctor from '../models/Doctor'
+import Doctor from '../models/Doctor';
 import Patient from '../models/Patient';
-import Expertise from '../models/Expertise'
+import Expertise from '../models/Expertise';
 import CreateConsultaService from '../services/CreateConsultaService';
 
 const consultaRouter = Router();
@@ -21,25 +21,20 @@ consultaRouter.get('/', async (request, response) => {
         'cobertura',
         'Consulta.cobertura_id = cobertura.id',
       )
+      .leftJoinAndSelect(Patient, 'patient', 'Consulta.patient_id = patient.id')
       .leftJoinAndSelect(
-        Patient,
-        'patient',
-        'Consulta.patient_id = patient.id',
-      ).leftJoinAndSelect(
         DoctorTime,
         'doctor_time',
-        'Consulta.doctor_time_id = doctor_time.id'
-      ).leftJoinAndSelect(
-        Doctor,
-        'doctor',
-        'doctor_time.doctor_id = doctor.id'
-      ).leftJoinAndSelect(
+        'Consulta.doctor_time_id = doctor_time.id',
+      )
+      .leftJoinAndSelect(Doctor, 'doctor', 'doctor_time.doctor_id = doctor.id')
+      .leftJoinAndSelect(
         Expertise,
         'expertise',
-        'doctor.expertise_id = expertise.id'
+        'doctor.expertise_id = expertise.id',
       )
       .getRawMany();
-    consultas.map((consulta) => {
+    consultas.map(consulta => {
       delete consulta.Consulta_doctor_time_id;
       delete consulta.Consulta_patient_id;
       delete consulta.Consulta_cobertura_id;
@@ -65,14 +60,11 @@ consultaRouter.get('/', async (request, response) => {
       delete consulta.expertise_id;
       delete consulta.expertise_created_at;
       delete consulta.expertise_updated_at;
-
-    })
-    console.log(consultas);
+    });
     response.json(consultas);
   } catch (error) {
-    console.log(error);
+    console.err(error);
   }
-
 });
 
 consultaRouter.post('/', async (request, response) => {

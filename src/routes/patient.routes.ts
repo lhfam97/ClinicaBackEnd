@@ -22,7 +22,7 @@ patientRouter.post('/', async (request, response) => {
     street,
     neighborhood,
     number,
-    password
+    password,
   } = request.body;
   const createPatientService = new CreatePatientService();
 
@@ -35,7 +35,7 @@ patientRouter.post('/', async (request, response) => {
     street,
     neighborhood,
     number,
-    password
+    password,
   });
 
   return response.json(patient);

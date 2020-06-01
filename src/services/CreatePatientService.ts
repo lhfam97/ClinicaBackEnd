@@ -4,6 +4,7 @@ import moment from 'moment';
 import Address from '../models/Address';
 import Patient from '../models/Patient';
 import AppError from '../errors/AppError';
+
 interface Request {
   name: string;
 
@@ -34,7 +35,7 @@ class CreatePatientService {
     street,
     neighborhood,
     number,
-    password
+    password,
   }: Request): Promise<Patient> {
     const patientRepository = getRepository(Patient);
     const addressRepository = getRepository(Address);
@@ -67,7 +68,7 @@ class CreatePatientService {
         address: checkAddressExists,
         cpf,
         rg,
-        password: hashedPassword
+        password: hashedPassword,
       });
       await patientRepository.save(patient);
       delete patient.password;
