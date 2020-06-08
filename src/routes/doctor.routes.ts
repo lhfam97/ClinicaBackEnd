@@ -7,6 +7,7 @@ import CreateDoctorService from '../services/CreateDoctorService';
 const doctorRouter = Router();
 
 doctorRouter.get('/', async (request, response) => {
+  console.log("entrou")
   const doctorRepository = getRepository(Doctor);
   const doctors = await doctorRepository.find();
   response.json(doctors);

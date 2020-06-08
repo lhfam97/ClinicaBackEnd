@@ -7,6 +7,7 @@ import timesRouter from './time.routes';
 import doctorTimeRouter from './doctorTime.routes';
 import consultaRouter from './consulta.routes';
 import sessionsRouter from './sessions.routes';
+import receitaMedicaRouter from './receitaMedica.routes';
 
 const routes = Router();
 routes.use('/expertises', expertiseRouter);
@@ -17,5 +18,6 @@ routes.use('/times', timesRouter);
 routes.use('/doctorTime', doctorTimeRouter);
 routes.use('/consulta', consultaRouter);
 routes.use('/sessions', sessionsRouter);
+routes.use('/receitaMedica', receitaMedicaRouter);
 
 export default routes;

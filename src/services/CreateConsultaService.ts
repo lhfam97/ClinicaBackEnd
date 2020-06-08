@@ -17,6 +17,7 @@ class CreateConsultaService {
     patient_id,
     cobertura_id,
   }: Request): Promise<Consulta> {
+
     const consultaRepository = getRepository(Consulta);
     const doctorTimeRepository = getRepository(DoctorTime);
 
@@ -25,9 +26,11 @@ class CreateConsultaService {
     });
 
     if (!checkDoctorTimeExists) {
+      console.log("hey1");
       throw new AppError('DoctorTime do not exist');
     }
     if (checkDoctorTimeExists.available === false) {
+      console.log("hey2");
       throw new AppError('This time was already booked');
     }
     const consulta = consultaRepository.create({

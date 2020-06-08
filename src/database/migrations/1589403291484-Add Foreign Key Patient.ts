@@ -1,5 +1,6 @@
 import { MigrationInterface, QueryRunner, TableForeignKey } from 'typeorm';
 
+// eslint-disable-next-line import/prefer-default-export
 export class AddForeignKeyPatient1589403291484 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.createForeignKey(

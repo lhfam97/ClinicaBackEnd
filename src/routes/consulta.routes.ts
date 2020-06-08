@@ -7,6 +7,7 @@ import Cobertura from '../models/Cobertura';
 import Doctor from '../models/Doctor';
 import Patient from '../models/Patient';
 import Expertise from '../models/Expertise';
+import Time from '../models/Time';
 import CreateConsultaService from '../services/CreateConsultaService';
 
 const consultaRouter = Router();
@@ -26,6 +27,10 @@ consultaRouter.get('/', async (request, response) => {
         DoctorTime,
         'doctor_time',
         'Consulta.doctor_time_id = doctor_time.id',
+      ).leftJoinAndSelect(
+        Time,
+        'time',
+        'doctor_time.time_id = time.id',
       )
       .leftJoinAndSelect(Doctor, 'doctor', 'doctor_time.doctor_id = doctor.id')
       .leftJoinAndSelect(
