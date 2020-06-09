@@ -5,10 +5,17 @@ import AppError from '../errors/AppError';
 
 const receitaMedicaRouter = Router();
 
-receitaMedicaRouter.get('/', async (request, response) => {
-  const receitasMedicasRepository = getRepository(ReceitaMedica);
+receitaMedicaRouter.get('/:id?', async (request, response) => {
+  const { id } = request.params
+  // console.log(id)
+  if (id !== undefined) {
 
-  const receitasMedicas = await receitasMedicasRepository.find();
+    const receitasMedicas = await getRepository(ReceitaMedica).find({
+      where: { consulta_id: id }
+    });
+    response.json(receitasMedicas);
+  }
+  const receitasMedicas = await getRepository(ReceitaMedica).find();
   response.json(receitasMedicas);
 });
 

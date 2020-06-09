@@ -10,8 +10,8 @@ import {
 
 import Consulta from './Consulta'
 
-@Entity('receitas_medicas')
-class ReceitaMedica {
+@Entity('exames')
+class Exame {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -32,4 +32,4 @@ class ReceitaMedica {
   updated_at: Date;
 }
 
-export default ReceitaMedica;
+export default Exame;
